@@ -1,0 +1,149 @@
+openapi: 3.0.0
+info:
+  title: backend service
+  description: Сервис для управления ПВЗ и приемкой товаров
+  version: 1.0.0
+
+components:
+  schemas:
+    Token:
+      type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [employee, moderator]
+      required: [email, role]
+
+    PVZ:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        registrationDate:
+          type: string
+          format: date-time
+        city:
+          type: string
+          enum: [Москва, Санкт-Петербург, Казань]
+      required: [city]
+
+    Reception:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        dateTime:
+          type: string
+          format: date-time
+        pvzId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [in_progress, close]
+      required: [dateTime, pvzId, status]
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        dateTime:
+          type: string
+          format: date-time
+        type:
+          type: string
+          enum: [электроника, одежда, обувь]
+        receptionId:
+          type: string
+          format: uuid
+      required: [type, receptionId]
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      required: [message]
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+
+
+  /pvz:
+    get:
+      summary: Получение списка ПВЗ с фильтрацией по дате приемки и пагинацией
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: startDate
+          in: query
+          description: Начальная дата диапазона
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          description: Конечная дата диапазона
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Количество элементов на странице
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 30
+            default: 10
+      responses:
+        '200':
+          description: Список ПВЗ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    pvz:
+                      $ref: '#/components/schemas/PVZ'
+                    receptions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          reception:
+                            $ref: '#/components/schemas/Reception'
+                          products:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Product'

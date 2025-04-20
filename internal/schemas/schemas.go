@@ -1,15 +1,18 @@
 package schemas
 
-import "time"
+import (
+	"github.com/google/uuid"
+	"time"
+)
 
 type Token struct {
 	Token string `json:"token"`
 }
 
 type User struct {
-	Id    string `json:"uuid,omitempty"`
-	Email string `json:"email" validate:"required"`
-	Role  string `json:"role" validate:"required,oneof=employee moderator"`
+	Id    uuid.UUID `json:"uuid,omitempty"`
+	Email string    `json:"email" validate:"required"`
+	Role  string    `json:"role" validate:"required,oneof=employee moderator"`
 }
 
 type UserReg struct {
@@ -24,30 +27,35 @@ type UserLogin struct {
 }
 
 type PVZ struct {
-	Id               string    `json:"uuid,omitempty"`
+	Id               uuid.UUID `json:"uuid,omitempty"`
 	RegistrationDate time.Time `json:"date-time,omitempty"`
 	City             string    `json:"city," validate:"required, oneof = Москва Санкт-Петербург Казань"`
 }
 type Reception struct {
-	Id       string    `json:"uuid,omitempty"`
+	Id       uuid.UUID `json:"uuid,omitempty"`
 	DateTime time.Time `json:"date-time" validate:"required"`
-	PVZId    string    `json:"pvzuuid" validate:"required"`
+	PVZId    uuid.UUID `json:"pvzuuid" validate:"required"`
 	Status   string    `json:"status" validate:"required oneof = in_progress close"`
+	Products []Product `json:"products"`
 }
 
 type Product struct {
-	Id          string `json:"uuid,omitempty"`
-	DateTime    string `json:"date-time,omitempty"`
-	Type        string `json:"type" validate:"required,oneof = электроника одежда обувь"`
-	ReceptionId string `json:"receptionid" validate:"required"`
+	Id          uuid.UUID `json:"uuid,omitempty"`
+	DateTime    time.Time `json:"date-time,omitempty"`
+	Type        string    `json:"type" validate:"required,oneof = электроника одежда обувь"`
+	ReceptionId uuid.UUID `json:"receptionid" validate:"required"`
 }
 
 type Error struct {
 	Message string `json:"message" validate:"required"`
 }
 
-type MegaResponse struct {
-	Pvz     PVZ
-	Receipt Reception
-	Product Product
+type PVZWithReceptionsAndProducts struct {
+	PVZ        PVZ                     `json:"pvz"`
+	Receptions []ReceptionWithProducts `json:"receptions"`
+}
+
+type ReceptionWithProducts struct {
+	Reception Reception `json:"reception"`
+	Products  []Product `json:"products"`
 }

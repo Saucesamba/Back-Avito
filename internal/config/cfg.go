@@ -5,27 +5,33 @@ import (
 	"os"
 )
 
-const CONFIG_FILE = "../../config.yaml"
+const CONFIG_FILE = "config.yaml"
 
 type DBConfig struct {
-	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
-	Name     string `yaml:"database"`
+	Host     string `yaml:"dbhost"`
+	Port     string `yaml:"dbport"`
+	User     string `yaml:"dbuser"`
+	Password string `yaml:"dbpassword"`
+	Name     string `yaml:"dbdatabase"`
 }
 
 type ServerConfig struct {
-	Host string `yaml:"host"`
-	Port string `yaml:"port"`
+	Host string `yaml:"shost"`
+	Port string `yaml:"sport"`
 }
 
 type AppConfig struct {
-	Database DBConfig     `yaml:"database"`
+	Database *DBConfig    `yaml:"database"`
 	Server   ServerConfig `yaml:"server"`
+	JWT      JWTConfig    `yaml:"jwt"`
 }
 
-func LoadConfig() (*AppConfig, error) {
+type JWTConfig struct {
+	TokenExpiryHours int    `yaml:"tokenExpiryHours"`
+	Secret           string `yaml:"secret"`
+}
+
+func (a *AppConfig) LoadConfig() (*AppConfig, error) {
 	cfg := &AppConfig{}
 	file, err := os.ReadFile(CONFIG_FILE)
 	if err != nil {
@@ -33,4 +39,5 @@ func LoadConfig() (*AppConfig, error) {
 	}
 	err = yaml.Unmarshal(file, cfg)
 	return cfg, err
+
 }
