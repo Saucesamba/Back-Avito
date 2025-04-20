@@ -21,6 +21,7 @@ type Database interface {
 	CloseLastRec(ctx context.Context, pvzId uuid.UUID) (*schemas.Reception, error)
 	CreateProduct(ctx context.Context, typ string, pvzId uuid.UUID) (*schemas.Product, error)
 	DeleteProduct(ctx context.Context, pvzId uuid.UUID) error
+	GetProduct(id uuid.UUID) ([]schemas.Product, error)
 }
 
 // Конкретная БД - PostgreSQL

@@ -17,7 +17,7 @@ type PVZHandler struct {
 	*BaseHandler
 }
 
-func NewPVZHandler(db *db.AvitoDB, config *config.AppConfig) *PVZHandler {
+func NewPVZHandler(db db.Database, config *config.AppConfig) *PVZHandler {
 	return &PVZHandler{&BaseHandler{DB: db, Config: config}}
 }
 

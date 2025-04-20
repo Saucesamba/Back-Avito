@@ -16,7 +16,7 @@ type ReceptionHandler struct {
 	*BaseHandler
 }
 
-func NewReceptionHandler(db *db.AvitoDB, config *config.AppConfig) *ReceptionHandler {
+func NewReceptionHandler(db db.Database, config *config.AppConfig) *ReceptionHandler {
 	return &ReceptionHandler{&BaseHandler{DB: db, Config: config}}
 }
 

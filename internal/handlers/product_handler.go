@@ -15,7 +15,7 @@ type ProductHandler struct {
 	*BaseHandler
 }
 
-func NewProductHandler(db *db.AvitoDB, config *config.AppConfig) *ProductHandler {
+func NewProductHandler(db db.Database, config *config.AppConfig) *ProductHandler {
 	return &ProductHandler{&BaseHandler{DB: db, Config: config}}
 }
 

@@ -15,7 +15,7 @@ type UserHandler struct {
 	*BaseHandler
 }
 
-func NewUserHandler(db *db.AvitoDB, config *config.AppConfig) *UserHandler {
+func NewUserHandler(db db.Database, config *config.AppConfig) *UserHandler {
 	return &UserHandler{&BaseHandler{DB: db, Config: config}}
 }
 

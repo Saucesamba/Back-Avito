@@ -9,11 +9,11 @@ import (
 )
 
 type BaseHandler struct {
-	DB     *db.AvitoDB
+	DB     db.Database
 	Config *config.AppConfig
 }
 
-func NewBaseHandler(DB *db.AvitoDB, Config *config.AppConfig) *BaseHandler {
+func NewBaseHandler(DB db.Database, Config *config.AppConfig) *BaseHandler {
 	return &BaseHandler{
 		DB:     DB,
 		Config: Config,
