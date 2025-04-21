@@ -36,10 +36,20 @@ func (app *App) Initialize() error {
 		return err
 	}
 	app.Config = cfg
-	avitoDB, err := new(db.AvitoDB).NewDB(app.Config.Database)
+	log.Println("Waiting for database to start...")
+	time.Sleep(10 * time.Second)
+
+	avitoDB, err := new(db.AvitoDB).NewDB(&config.DBConfig{
+		Host:     app.Config.Database.Host,
+		Port:     app.Config.Database.Port,
+		User:     app.Config.Database.User,
+		Password: app.Config.Database.Password,
+		Name:     app.Config.Database.Name,
+	})
 	if err != nil {
 		return fmt.Errorf("failed to initialize database: %w", err) // Added error context
 	}
+
 	app.DB = avitoDB
 
 	app.Router = mux.NewRouter()

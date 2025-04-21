@@ -1,13 +1,13 @@
 database:
-  dbhost: "localhost"
+  dbhost: "db"
   dbport: "5432"
   dbuser: "postgres"
   dbpassword: "123456789"
   dbdatabase: "Avito-back"
 
 server:
-  shost: "localhost"
-  sport: "8081"
+  shost: ""
+  sport: "8080"
 
 jwt:
   tokenExpiryHours: 1
